@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./lib/jquery/dist/jquery.min.js"></script>
+    <script src="./js/ttt.js"></script>
+  </head>
+  <body>
+    <center>
+      <h4>Welcome, <%= name %></h4>
+      <p><%= date %></p>
+      
+      <ul class="ttt-container" id="ttt-container">
+        <% for(var i=0; i<data.grid.length; i++) {%>
+          <li class="tile tile-<%= i %> tile-<%= data.grid[i] %> border" id="<%= i %>"><%= data.grid[i] %></li>
+        <% } %>
+      </ul>
+
+      <div class="alert alert-success" id="alert-winner" style="display: none;" role="alert"></div>
+      
+      <button class="btn btn-danger" id="restart-btn" style="color: white">Restart</button>
+
+    </center>
+  </body>
+</html>
+

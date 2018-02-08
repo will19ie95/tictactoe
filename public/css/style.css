@@ -1,0 +1,74 @@
+.container {
+  height: 100%;
+}
+
+.container .center {
+  vertical-align: middle;
+  margin: 0 auto;
+}
+
+ul,
+li{
+  list-style: none;
+}
+
+.ttt-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  width: 300px;
+  padding: 0px;
+}
+
+.tile {
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  margin: auto;
+  text-align: center;
+  font-size: 45px;
+}
+
+.tile-0,
+.tile-1,
+.tile-2 {
+  border-top: none !important;
+}
+
+.tile-2,
+.tile-5,
+.tile-8 {
+  border-right: none !important;
+}
+
+.tile-6,
+.tile-7,
+.tile-8 {
+  border-bottom: none !important;
+}
+
+.tile-0,
+.tile-3,
+.tile-6 {
+  border-left: none !important;
+}
+
+.tile:hover {
+  background-color: rgba(0,255,0,.25);
+  cursor: pointer;
+}
+
+.tile.tile-X:hover {
+  /* background-color: rgba(255,0,0,.25); */
+  background-color: transparent;
+  cursor: default;
+}
+
+.tile.tile-O:hover {
+  /* background-color: rgba(255,0,0,.25); */
+  background-color: transparent;
+  cursor: default;
+}
+
