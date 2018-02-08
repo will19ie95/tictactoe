@@ -133,11 +133,13 @@ $(document).ready(function() {
     $(".tile").each(function() {
       $(this).removeClass("tile-O");
       $(this).removeClass("tile-X");
+      $(this).unbind("click");
 
       console.log($(this).hasClass(".tile-X"))
     })
-    // $(".tile").removeClass(".tile-X");
+
     toggle_tile();
+
     $("#alert-winner").css("display", "none");
     console.log("toggled tiles")
 
