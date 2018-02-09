@@ -17,8 +17,13 @@ app.set("view engine", "ejs");
 app.grid = [" ", " ", " ", " ", "", " ", " ", " ", " "];
 app.winner = " ";
 
+app.use(function(req, res, next) {
+  console.log("Time:", Date.now());
+  next();
+});
+
 app
-  .get("/", (req, res) => res.render("pages/index"))
+  .get("/", (req, res) => res.render("pages/login"))
   .post("/", function(req, res) {
     app.grid = [" ", " ", " ", " ", "", " ", " ", " ", " "];
     app.winner = " ";
@@ -34,7 +39,7 @@ app
     });
   });
 
-app.post("/play", function(req, res) {
+app.post("/ttt/play", function(req, res) {
 
   var check_winner = function (grid) {
     winner = "";
@@ -131,21 +136,5 @@ app.get("/ttt", (req, res) => res.render("pages/index"))
       }
     });
   });
-  
-
-// app
-//   .get("/ttt", (req, res) =>
-//     res.sendFile(path.join(__dirname + "/front-page.html"))
-//   )
-//   .post("/ttt", function(req, res) {
-//     name = req.body.name;
-//     date = new Date();
-//     console.log(name);
-//     console.log(date);
-//     res.sendFile(path.join(__dirname + "/hello.html"));
-//   });
-// .post("/ttt", (req, res) =>
-//   res.sendFile(path.join(__dirname + "/hello.html"))
-// );
 
 app.listen(3000, () => console.log("Example app listening on port 3000!"));
