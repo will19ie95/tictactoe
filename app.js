@@ -39,7 +39,7 @@ app
     });
   });
 
-app.post("/ttt/play", function(req, res) {
+app.post("/play", function(req, res) {
 
   var check_winner = function (grid) {
     winner = "";

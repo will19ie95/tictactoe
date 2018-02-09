@@ -43,7 +43,7 @@ $(document).ready(function() {
     }
 
     if (winner === "X" || winner === "O") {
-        console.log(winner + " Won");
+        // console.log(winner + " Won");
         $("#alert-winner").html(winner + " Won!");
         $("#alert-winner").css("display", "block");
         // disconnect ui
@@ -113,7 +113,7 @@ $(document).ready(function() {
 
             if (winner) {
               // winner found
-              console.log(winner + " Won!");
+              // console.log(winner + " Won!");
               $("#alert-winner").html(winner + " Won!");
               $("#alert-winner").css("display", "block");
               // disconnect ui
@@ -135,13 +135,13 @@ $(document).ready(function() {
       $(this).removeClass("tile-X");
       $(this).unbind("click");
 
-      console.log($(this).hasClass(".tile-X"))
+      // console.log($(this).hasClass(".tile-X"))
     })
 
     toggle_tile();
 
     $("#alert-winner").css("display", "none");
-    console.log("toggled tiles")
+    // console.log("toggled tiles")
 
     $.ajax({
       url: "/",
