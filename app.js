@@ -73,6 +73,7 @@ app.post("/play", function(req, res) {
     return winner;
   }
 
+  console.log("Body Req:", req.body.grid);
   // accept user move
   app.grid = req.body.grid;
   console.log("body grid", app.grid)
@@ -116,25 +117,9 @@ app.post("/play", function(req, res) {
     winner: winner
   }
 
-  // users turn again 
-  res.send(data);
+  // users turn again
+  res.json(data);
 
 })
 
-
-app.get("/ttt", (req, res) => res.render("pages/index"))
-  .post("/ttt", function(req, res) {
-    console.log(req.body);
-    
-    res.render("pages/hello", {
-      name: req.body.name,
-      date: new Date(),
-      symbol: "O",
-      data: {
-        grid: ["", "", "", "", "", "", "", "", ""],
-        winner: ""
-      }
-    });
-  });
-
-app.listen(3000, () => console.log("Example app listening on port 3000!"));
+app.listen(8080, () => console.log("Example app listening on port 8080!"));
