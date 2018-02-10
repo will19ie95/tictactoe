@@ -18,23 +18,24 @@ app.grid = [" ", " ", " ", " ", "", " ", " ", " ", " "];
 app.winner = " ";
 
 app.use(function(req, res, next) {
-  console.log("Time:", Date.now());
+  // console.log("Time:", Date.now());
   next();
 });
 
 app
   .get("/", (req, res) => res.render("pages/login"))
   .post("/", function(req, res) {
-    app.grid = [" ", " ", " ", " ", "", " ", " ", " ", " "];
+
+    app.grid = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
     app.winner = " ";
-    console.log("restarting...");
+
+    console.log("*** Restarting ***");
 
     res.render("pages/hello", {
       name: req.body.name,
       date: new Date(),
       data: {
-        grid: app.grid,
-        winner: ""
+        grid: app.grid
       }
     });
   });
@@ -75,13 +76,13 @@ app.post("/play", function(req, res) {
 
   // accept user move
   app.grid = req.body.grid;
-  console.log("body grid", app.grid)
+  // console.log("body grid", app.grid)
   app.winner = req.body.winner || "";
-  console.log(app.grid);
+  // console.log(app.grid);
 
   if(app.winner) {
-    console.log(app.winner + " Won!")
-    app.grid = [" ", " ", " ", " ", "", " ", " ", " ", " "];
+    // console.log(app.winner + " Won!")
+    app.grid = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
   }
 
   move = -1;
@@ -101,7 +102,7 @@ app.post("/play", function(req, res) {
       let rand = Math.floor(Math.random() * 9);
       if (app.grid[rand] !== "X" && app.grid[rand] !== "O") {
         app.grid[rand] = "O";
-        console.log("Placing move at tile: ", rand);
+        // console.log("Placing move at tile: ", rand);
         move = rand;
         placing_move = false;
       }
@@ -117,24 +118,8 @@ app.post("/play", function(req, res) {
   }
 
   // users turn again 
-  res.send(data);
+  res.json(data);
 
 })
 
-
-app.get("/ttt", (req, res) => res.render("pages/index"))
-  .post("/ttt", function(req, res) {
-    console.log(req.body);
-    
-    res.render("pages/hello", {
-      name: req.body.name,
-      date: new Date(),
-      symbol: "O",
-      data: {
-        grid: ["", "", "", "", "", "", "", "", ""],
-        winner: ""
-      }
-    });
-  });
-
-app.listen(3000, () => console.log("Example app listening on port 3000!"));
+app.listen(8080, () => console.log("Example app listening on port 8080!"));
