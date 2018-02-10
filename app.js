@@ -43,7 +43,7 @@ app
 app.post("/play", function(req, res) {
 
   var check_winner = function (grid) {
-    winner = "";
+    winner;
 
     // winning with 0
     if (grid[0] === "X" || grid[0] === "O") {
@@ -74,15 +74,14 @@ app.post("/play", function(req, res) {
     return winner;
   }
 
+  var winner = check_winner(app.grid);
+
   console.log("Body Req:", req.body.grid);
+
   // accept user move
   app.grid = req.body.grid;
-  // console.log("body grid", app.grid)
-  app.winner = req.body.winner || "";
-  // console.log(app.grid);
 
-  if(app.winner) {
-    // console.log(app.winner + " Won!")
+  if (winner) {
     app.grid = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
   }
 
@@ -96,7 +95,7 @@ app.post("/play", function(req, res) {
   }
 
   
-  if (app.winner !== "X" && app.winner !== "O" && canMove) {
+  if (winner !== "X" && winner !== "O" && canMove) {
     // computer makes a random move
     placing_move = true;
     while (placing_move) {
@@ -110,12 +109,11 @@ app.post("/play", function(req, res) {
     }
   }
 
-  var winner = check_winner(app.grid);
 
   data = {
     grid: app.grid,
-    computer_move: move,
-    winner: winner
+    winner: winner,
+    computer_move: move
   }
 
   // users turn again
