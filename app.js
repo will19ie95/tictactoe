@@ -74,6 +74,7 @@ app.post("/play", function(req, res) {
     return winner;
   }
 
+  console.log("Body Req:", req.body.grid);
   // accept user move
   app.grid = req.body.grid;
   // console.log("body grid", app.grid)
@@ -117,7 +118,7 @@ app.post("/play", function(req, res) {
     winner: winner
   }
 
-  // users turn again 
+  // users turn again
   res.json(data);
 
 })

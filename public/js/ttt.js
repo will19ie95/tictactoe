@@ -82,5 +82,4 @@ $(document).ready(function() {
 
   toggle_tile();
   
-
 })
