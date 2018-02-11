@@ -51,7 +51,7 @@ function play(grid) {
       var grid = data.grid;
       var winner = data.winner;
 
-      // console.log("winner: ", winner);
+      console.log("winner: ", winner);
       // console.log("is undef: ", winner === undefined)
 
       set_curr_grid(grid);

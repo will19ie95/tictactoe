@@ -18,7 +18,6 @@ app.grid = [" ", " ", " ", " ", "", " ", " ", " ", " "];
 app.winner = " ";
 
 app.use(function(req, res, next) {
-  // console.log("Time:", Date.now());
   next();
 });
 
@@ -43,10 +42,7 @@ app
 function check_winner(grid) {
   var winner = " ";
 
-  console.log("\nchecking board: ", grid);
-
   if (grid[0] === "X" || grid[0] === "O") {
-    console.log("checking grid 0")
     // winning with 0
     if (
       (grid[0] === grid[1] && grid[1] === grid[2]) ||
@@ -59,7 +55,6 @@ function check_winner(grid) {
   
   if (grid[4] === "X" || grid[4] === "O") {
     // winning with 4
-    console.log("checking grid 4");
     if (
       (grid[0] === grid[4] && grid[4] === grid[8]) ||
       (grid[1] === grid[4] && grid[4] === grid[7]) ||
@@ -73,7 +68,6 @@ function check_winner(grid) {
   
   if (grid[8] === "X" || grid[8] === "O") {
     // winning with 8
-    console.log("checking grid 8");
     if (
       (grid[2] === grid[5] && grid[5] === grid[8]) ||
       (grid[6] === grid[7] && grid[7] === grid[8])
@@ -81,8 +75,6 @@ function check_winner(grid) {
       winner = grid[8];
     }
   }
-
-  console.log("winner is : " + winner);
 
   return winner;
 };
@@ -92,7 +84,7 @@ app.post("/play", function(req, res) {
   // accept user move
   app.grid = req.body.grid;
 
-  // console.log("\nRequest \n\t", app.grid);
+  console.log("\nRequest \n\t", app.grid);
 
   let winner = check_winner(app.grid);
   let tie = false;
@@ -105,6 +97,11 @@ app.post("/play", function(req, res) {
         canMove = true;
       }
     }
+
+    //number of X
+    //number of O
+
+
     // place a move
     if (canMove) {
       // computer makes a random move
@@ -119,7 +116,7 @@ app.post("/play", function(req, res) {
       }
     } else {
       // Tie, implement?
-      console.log(" Tie! ");
+      // console.log(" Tie! ");
       tie = true;
     }
   }
@@ -133,7 +130,6 @@ app.post("/play", function(req, res) {
 
   if (tie === true) {
     winner = " ";
-    console.log("/n/nTIE is detected s");
     app.grid = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
   } else if (winner === "X" || winner === "O") {
     app.grid = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
@@ -141,14 +137,13 @@ app.post("/play", function(req, res) {
     winner = undefined;
   }
 
-  console.log("WINNNING: ", winner);
   
   data = {
     grid: send_grid,
     winner: winner
   }
 
-  console.log("Sending \t", data)
+  console.log("\nSending \n\t", data)
 
   // users turn again
   res.json(data);
