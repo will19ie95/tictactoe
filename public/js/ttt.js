@@ -56,7 +56,7 @@ function play(grid) {
 
       set_curr_grid(grid);
       
-      var tie = winner === undefined;
+      var tie = winner === " ";
 
       //check for winner
       if(winner === "X" || winner === "O") {

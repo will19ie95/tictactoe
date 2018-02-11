@@ -92,7 +92,7 @@ app.post("/play", function(req, res) {
   // accept user move
   app.grid = req.body.grid;
 
-  console.log("\nRequest \n\t", app.grid);
+  // console.log("\nRequest \n\t", app.grid);
 
   let winner = check_winner(app.grid);
   let tie = false;
@@ -132,11 +132,13 @@ app.post("/play", function(req, res) {
   send_grid = app.grid.slice();
 
   if (tie === true) {
-    winner = undefined;
+    winner = " ";
     console.log("/n/nTIE is detected s");
     app.grid = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
   } else if (winner === "X" || winner === "O") {
     app.grid = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+  } else {
+    winner = undefined;
   }
 
   console.log("WINNNING: ", winner);
