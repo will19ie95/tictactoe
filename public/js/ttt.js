@@ -92,7 +92,7 @@ function toggle_tile() {
 }
 
 function restart() {
-  var emptyGrid = ["", "", "", "", "", "", "", "", ""];
+  var emptyGrid = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
   $(".tile-X")
     .html("")
     .addClass("tile-");
