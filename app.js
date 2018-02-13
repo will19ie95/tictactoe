@@ -193,14 +193,15 @@ function can_win(grid) {
   var win_move = -1;
 
   for (var i = 0; i < grid.length; i++) {
-    if (grid[i] !== "X" && grid["O"]) {
-      grid[i] === "O"
+    console.log("YO! ", i)
+    if (grid[i] !== "X" && grid[i] !== "O") {
+      grid[i] = "O";
       if (check_winner(grid) !== " ") {
         win_move = i;
-        console.log("Can win at ", i)
+        console.log("Can win at ", i);
         return win_move;
       } else {
-        grid[i] = " "
+        grid[i] = " ";
       }
     }
   }
