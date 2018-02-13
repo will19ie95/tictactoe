@@ -145,7 +145,7 @@ function smart_move(grid) {
         break;
       }
     }
-    
+
     if (block_arr_num) {
 
       if (block_arr_num === 0) {
@@ -189,6 +189,25 @@ function smart_move(grid) {
 
 }
 
+function can_win(grid) {
+  var win_move = -1;
+
+  for (var i = 0; i < grid.length; i++) {
+    if (grid[i] !== "X" && grid["O"]) {
+      grid[i] === "O"
+      if (check_winner(grid) !== " ") {
+        win_move = i;
+        console.log("Can win at ", i)
+        return win_move;
+      } else {
+        grid[i] = " "
+      }
+    }
+  }
+
+  return win_move;
+}
+
 app.post("/play", function(req, res) {
   
   // accept user move
@@ -216,9 +235,16 @@ app.post("/play", function(req, res) {
     }
     // place a move
     if (canMove) {
-      // computer makes a random move
-      var best_move = smart_move(app.grid);
-      app.grid[best_move] = "O";
+
+      // try to win
+      var win_move = can_win(app.grid);
+      if (win_move !== -1) {
+        app.grid[win_move] = "O";
+      } else {
+        // computer makes a random move
+        var best_move = smart_move(app.grid);
+        app.grid[best_move] = "O";
+      }
 
     } else {
       tie = true;
