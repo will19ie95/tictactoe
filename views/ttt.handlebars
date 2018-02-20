@@ -1,0 +1,17 @@
+<center style="margin-top: 100px;">
+
+  <h4>Welcome, {{ name }}</h4>
+  <p>{{ date }}</p>
+
+  <ul class="ttt-container" id="ttt-container">
+
+    {{#each data.grid}}
+    <li class="tile tile-{{@index}} tile-{{this}} border" id="{{@index}}">{{ this }}</li>
+    {{/each}}
+
+  </ul>
+
+  <div class="alert alert-success" id="alert-winner" style="display: none;" role="alert"></div>
+  <button class="btn btn-danger" id="restart-btn" style="color: white" onclick="restart()">Restart</button>
+
+</center>

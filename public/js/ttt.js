@@ -55,20 +55,18 @@ function play(grid) {
       // console.log("is undef: ", winner === undefined)
 
       set_curr_grid(grid);
-      
+
       var tie = winner === " ";
 
       //check for winner
-      if(winner === "X" || winner === "O") {
+      if (winner === "X" || winner === "O") {
         show_winner(winner);
         // disable ui
         disable_tile();
-
       } else if (tie) {
         show_winner("NO ONE");
         disable_tile();
       }
-
     }
   });
 }
@@ -87,7 +85,6 @@ function toggle_tile() {
     $("#" + tile_id).unbind("click");
 
     play(grid);
-    
   });
 }
 
@@ -113,9 +110,6 @@ function restart() {
   $.ajax({ url: "/", type: "get", dataType: "html" });
 }
 
-
 $(document).ready(function() {
-
   toggle_tile();
-  
-})
+});
