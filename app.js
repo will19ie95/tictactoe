@@ -7,6 +7,9 @@ const cookieParser = require("cookie-parser");
 const flash = require("connect-flash");
 const session = require("express-session");
 const logger = require("morgan");
+const passport = require("passport");
+
+const setup_passport = require("./setup_passport")
 
 // routes
 const router = require("./router.js");
@@ -28,6 +31,8 @@ app.set("port", port);
 app.use(express.static(path.join(__dirname, "public")));
 
 mongoose.connect("mongodb://130.245.168.108:27017/demo");
+setup_passport();
+
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
@@ -45,9 +50,17 @@ app.use(
 );
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 // logger
 app.use(logger("dev"));
 
 app.use(router);
+
+app.use(function(err, req, res, next) {
+  console.err(err);
+  res.status(404).send("Sever Error")
+})
 
 app.listen(port, () => console.log("Example app listening on port " + port));

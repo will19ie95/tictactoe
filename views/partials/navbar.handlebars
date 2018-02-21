@@ -1,3 +1,24 @@
 <nav class="navbar navbar-dark bg-dark">
   <a class="navbar-brand" href="/">Tic Tac Toe</a>
+
+  <a href="/signup">
+    <button class="btn btn-outline-success">Sign Up</button>
+  </a>
 </nav>
+
+<div class="container">
+  <div class="row">
+     <div class="col-md-4 offset-md-4">
+       {{#each errors}}
+        <div class="alert alert-danger">
+          {{this}}
+        </div>
+       {{/each}}
+       {{#each infos}}
+        <div class="alert alert-info">
+          {{this}}
+        </div>
+      {{/each}}
+     </div>
+  </div>
+</div>

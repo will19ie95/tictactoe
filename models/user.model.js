@@ -14,10 +14,21 @@ function isEmail(email) {
 }
 
 const userSchema = new Schema({
+  email: {
+    type: String,
+    validate: [isEmail, "Invalid Email Address"],
+    unique: true
+  },
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  email: { type: String, validate: [isEmail, "Invalid Email Address"] },
-  createdAt: { type: Date, default: Date.now }
+  isVerified: { type: Boolean, default: false }
+});
+
+// token valid for 6 hrs
+const vTokenSchema = new Schema({
+  _userId: { type: mongoose.Schema.Types.ObjectId, require: true, ref: "User"},
+  token: {type: String, required: true},
+  createdAt: {type: Date, required: true, default: Date.now, expires: 21600}
 });
 
 const noop = function() {};
@@ -28,7 +39,6 @@ userSchema.pre("save", function(done) {
   if (!user.isModified("password")) {
     return done();
   }
-
   bcrypt.genSalt(SALT_FACTOR, function(err, salt) {
     if (err) {
       return done(err);
