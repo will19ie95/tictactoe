@@ -1,5 +1,5 @@
 const passport = require("passport");
-const User = require("./models/user.model");
+const User = require("./models/user");
 const LocalStrategy = require("passport-local").Strategy
 
 module.exports = function() {
@@ -13,11 +13,18 @@ module.exports = function() {
     });
   });
 
-  passport.use("login", new LocalStrategy(function(username, password, done){
+  passport.use("login", new LocalStrategy({
+    usernameField: "username",
+    passwordField: "password"
+  },
+  function(username, password, done){
     User.findOne({username: username}, function(err, user) {
       if (err) { return done(err)}
       if (!user) {
         return done(null, false, { message: "User name not found" })
+      }
+      if (!user.isVerified) {
+        return done(null, false, { message: "User is not verified" })
       }
       user.checkPassword(password, function(err, isMatch) {
         if (err) { return done(err) }

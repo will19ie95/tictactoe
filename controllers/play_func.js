@@ -8,6 +8,7 @@ const count_array = function(arr, obj) {
   return count;
 };
 
+// return winner or Null
 const check_winner = function(grid) {
   var winner = " ";
   if (grid[0] === "X" || grid[0] === "O") {
@@ -17,6 +18,7 @@ const check_winner = function(grid) {
       (grid[0] === grid[3] && grid[3] === grid[6])
     ) {
       winner = grid[0];
+      return winner;
     }
   }
   if (grid[4] === "X" || grid[4] === "O") {
@@ -28,6 +30,7 @@ const check_winner = function(grid) {
       (grid[3] === grid[4] && grid[4] === grid[5])
     ) {
       winner = grid[4];
+      return winner;
     }
   }
   if (grid[8] === "X" || grid[8] === "O") {
@@ -37,9 +40,19 @@ const check_winner = function(grid) {
       (grid[6] === grid[7] && grid[7] === grid[8])
     ) {
       winner = grid[8];
+      return winner;
     }
   }
-  return winner;
+
+  for (var i = 0; i < grid.length; i++) {
+    if (grid[i] === " ") {
+      // returning null for no winner
+      return null;
+    }
+  }
+
+  // return winner or " " if tie
+  return " ";
 };
 
 const smart_move = function(grid) {

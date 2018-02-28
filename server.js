@@ -8,6 +8,7 @@ const flash = require("connect-flash");
 const session = require("express-session");
 const logger = require("morgan");
 const passport = require("passport");
+const db = require("./db");
 
 const setup_passport = require("./setup_passport")
 
@@ -30,7 +31,14 @@ app.set("port", port);
 
 app.use(express.static(path.join(__dirname, "public")));
 
-mongoose.connect("mongodb://130.245.168.108:27017/demo");
+db.connect("mongodb://130.245.168.108:27017/demo", function (err) {
+  if (err) {
+    console.log("Error connecting to mongo");
+  } else {
+    console.log("Connected to mongo");
+  }
+});
+
 setup_passport();
 
 app.use(bodyParser.json());
@@ -45,6 +53,7 @@ app.use(
   session({
     secret: "water is life",
     resave: true,
+    cookie: { maxAge: 1000 * 60 * 60 * 24 },
     saveUninitialized: true
   })
 );
@@ -54,13 +63,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // logger
-app.use(logger("dev"));
+app.use(logger("short"));
 
 app.use(router);
-
-app.use(function(err, req, res, next) {
-  console.err(err);
-  res.status(404).send("Sever Error")
-})
 
 app.listen(port, () => console.log("Example app listening on port " + port));

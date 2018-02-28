@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const passport = require("passport");
 
-const play = require("./routes/play.js");
-const signup = require("./routes/signup.js");
-const verify = require("./routes/verify.js");
-const login = require("./routes/login.js");
-const adduser = require("./routes/adduser.js");
+const home = require("./controllers/home.js");
+const game = require("./controllers/ttt.js");
+const play = require("./controllers/play.js");
+const userController = require("./controllers/user.js");
 
 const init_locals = function(req, res, next) {
   res.locals.currenUser = req.user;
@@ -14,14 +14,46 @@ const init_locals = function(req, res, next) {
   next();
 };
 
+function ensureAuthenticated(req, res, next) {
+  if(req.isAuthenticated()) {
+    next()
+  } else {
+    req.flash("info", "You must be logged in.")
+    res.redirect("/")
+  }
+}
+
 router.use(init_locals);
 
-// home page
-router.use("/", login);
-router.use("/signup", signup);
-router.use("/verify", verify);
-// play API
-router.use("/play", play);
-router.use("/adduser", adduser);
+router.get("/", home);
+
+// POST API Calls
+// router.post("/signup", signup);
+router.post("/ttt/play", ensureAuthenticated, game.play);
+router.post("/adduser", userController.addUser);
+router.post("/verify", userController.verify);
+router.post("/login", userController.login_post);
+router.post("/logout", userController.logout);
+router.post("/listgames", game.listGames);
+router.post("/getgame", game.getGame);
+router.post("/getscore", game.getScore);
+// getscore
+
+router.get("/login", userController.login_get);
+router.get("/signup", userController.signup_get);
+
+
+// catch all other routes
+router.use("*", function (req, res) {
+  res.redirect("/");
+})
+
+// catch error
+router.use(function (err, req, res, next) {
+  console.log(err);
+  return res.status(404).json({
+    "status": "ERROR"
+  });
+})
 
 module.exports = router;

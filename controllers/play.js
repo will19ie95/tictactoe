@@ -6,13 +6,6 @@ router.post("/", function(req, res) {
   // accept user move'
   grid = req.body.grid;
 
-  // make sure empty space
-  for (var i = 0; i < grid.length; i++) {
-    if (grid[i] !== "O" && grid[i] !== "X") {
-      grid[i] = " ";
-    }
-  }
-
   let winner = ttt.check_winner(grid);
   let tie = false;
 
