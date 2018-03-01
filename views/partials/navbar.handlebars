@@ -1,9 +1,17 @@
 <nav class="navbar navbar-dark bg-dark">
   <a class="navbar-brand" href="/">Tic Tac Toe</a>
-
-  <a href="/signup">
-    <button class="btn btn-outline-success">Sign Up</button>
-  </a>
+  
+    {{#if user}}
+      <a href="/logout"><button class="btn btn-outline-success">Log Out</button></a>
+    {{else}}
+      <a href="/login">
+        <button class="btn btn-outline-success">Log In</button>
+      </a>
+      <a href="/signup">
+        <button class="btn btn-outline-success">Sign Up</button>
+      </a>
+    {{/if}}
+  
 </nav>
 
 <div class="container">

@@ -11,6 +11,24 @@ exports.ttt = function (req, res) {
   })
 }
 
+exports.home = function(req, res) {
+  // check if user logged in
+  if (req.user) {
+    res.locals.name = req.user.username;
+    res.locals.date = Date.now()
+    res.locals.data = {
+      grid: req.user.ttt.grid
+    }
+    res.locals.winner = req.user.winner
+    res.render("ttt", {
+      name: req.user.username,
+      date: new Date()
+    });
+  } else {
+    res.redirect("/login")
+  }
+}
+
 exports.listGames = function (req, res) {
   // get current grid from mongo
   // console.log("USER:", req.user)

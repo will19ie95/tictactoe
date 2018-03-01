@@ -105,7 +105,7 @@ exports.login_post = function(req, res, next) {
 
 exports.login_get = function(req, res) {
   if (req.user) {
-    res.locals.name = req.user.username;
+    res.locals.name = req.user.username;r
     res.locals.date = new Date();
     res.locals.data = {
       grid: [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
@@ -116,7 +116,7 @@ exports.login_get = function(req, res) {
   }
 }
 
-exports.logout = function(req, res, next) {
+exports.logout = function(req, res) {
   if (req.user) {
     req.logout();
     return res.json({

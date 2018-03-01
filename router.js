@@ -2,13 +2,14 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 
-const home = require("./controllers/home.js");
+// const home = require("./controllers/home.js");
 const game = require("./controllers/ttt.js");
 const play = require("./controllers/play.js");
 const userController = require("./controllers/user.js");
 
 const init_locals = function(req, res, next) {
-  res.locals.currenUser = req.user;
+  res.locals.user = req.user;
+  res.locals.date = new Date();
   res.locals.errors = req.flash("error");
   res.locals.infos = req.flash("info");
   next();
@@ -25,8 +26,6 @@ function ensureAuthenticated(req, res, next) {
 
 router.use(init_locals);
 
-router.get("/", home);
-
 // POST API Calls
 // router.post("/signup", signup);
 router.post("/ttt/play", ensureAuthenticated, game.play);
@@ -41,6 +40,10 @@ router.post("/getscore", game.getScore);
 
 router.get("/login", userController.login_get);
 router.get("/signup", userController.signup_get);
+router.get("/logout", userController.logout);
+
+
+router.get("/", game.home);
 
 
 // catch all other routes
