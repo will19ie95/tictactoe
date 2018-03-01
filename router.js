@@ -19,8 +19,11 @@ function ensureAuthenticated(req, res, next) {
   if(req.isAuthenticated()) {
     next()
   } else {
-    req.flash("info", "You must be logged in.")
-    res.redirect("/")
+    // req.flash("info", "You must be logged in.")
+    // res.redirect("/")
+    res.json({
+      "Status": "Error"
+    })
   }
 }
 
