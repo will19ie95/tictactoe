@@ -45,9 +45,9 @@ exports.getGame = function (req, res) {
   id = req.body.id
   User.findOne({ "_id": req.user._id }, function (err, user) {
     if (err) { res.json({ "Status": "Error" }) }
-    if (user.history[id]) {
+    if (user.history[id-1]) {
       // game found
-      game = user.history[id]
+      game = user.history[id-1]
       res.json({
         status: "OK",
         grid: game.grid,
