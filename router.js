@@ -22,7 +22,7 @@ function ensureAuthenticated(req, res, next) {
     // req.flash("info", "You must be logged in.")
     // res.redirect("/")
     res.json({
-      "Status": "Error"
+      status: "ERROR"
     })
   }
 }
