@@ -172,7 +172,7 @@ exports.play = function (req, res) {
 
           user.save(function (err, user) {
             if (err) { res.json({ "Status": "Error" }) }
-            console.log("User Updated.", user)
+            // console.log("User Updated.", user)
             res.json({
               "grid": winGrid,
               "winner": winner
@@ -185,7 +185,7 @@ exports.play = function (req, res) {
           user.ttt.grid = newGrid;
           user.save(function (err, user) {
             if (err) { res.json({ "Status": "Error" }) }
-            console.log("User Updated.", user)
+            // console.log("User Updated.", user)
             res.json({
               "grid": newGrid
             })

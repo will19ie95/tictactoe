@@ -64,6 +64,10 @@ app.use(passport.session());
 
 // logger
 app.use(logger("short"));
+app.use(function(req,res,next) {
+  console.log(req.body)
+  next()
+});
 
 app.use(router);
 
