@@ -69,13 +69,13 @@ exports.verify = function (req, res, next) {
         console.log("user updated")
         req.flash("info", "Thank You for Verifying.")
         // return res.redirect("/");
-        return res.status(200).json({
+        return res.json({
           status: "OK"
         })
       })
     } else {
       // next()
-      return res.status(404).json({
+      return res.json({
         status: "ERROR"
       })
 
