@@ -56,8 +56,7 @@ exports.getGame = function (req, res) {
     } else {
       // game not found
       res.json({
-        status: "ERROR",
-        message: "Game Not Found"
+        status: "ERROR"
       })
     }
     
