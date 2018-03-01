@@ -188,8 +188,7 @@ exports.play = function (req, res) {
             if (err) { res.json({ "Status": "Error" }) }
             console.log("User Updated.", user)
             res.json({
-              "grid": newGrid,
-              "winner": ""
+              "grid": newGrid
             })
           })
         })
