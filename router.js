@@ -97,7 +97,7 @@ router.post('/speak', function(req, res) {
     ch.publish(ex, key, new Buffer(msg));
     console.log(" [x] Sent %s: '%s'", key, msg);
     ch.close()
-    res.json({
+    return res.json({
       status: "OK"
     })
   });
