@@ -97,6 +97,7 @@ router.post('/speak', function(req, res) {
   });
 
   setTimeout(function () { 
+    ch.close()
     res.json({
       status: "OK"
     })
