@@ -2,12 +2,16 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const amqp = require('amqplib/callback_api');
-
+const self = this
 
 // const home = require("./controllers/home.js");
 const game = require("./controllers/ttt.js");
 const play = require("./controllers/play.js");
 const userController = require("./controllers/user.js");
+
+  amqp.connect('amqp://localhost', function (err, conn) {
+    self.conn = conn
+  });
 
 const init_locals = function(req, res, next) {
   res.locals.user = req.user;
@@ -51,35 +55,32 @@ router.get("/logout", userController.logout);
 
 // listen, receiver
 router.post("/listen", function(req, res) {
-  keys = req.body.keys
 
-  // if (keys.length == 0) {
-  //   console.log("Usage: receive_logs_direct.js [info] [warning] [error]");
-  //   process.exit(1);
-  // }
+  self.conn.createChannel(function (err, ch) {
+    keys = req.body.keys
+    var ex = 'hw3';
 
-  amqp.connect('amqp://localhost', function (err, conn) {
-    conn.createChannel(function (err, ch) {
-      var ex = 'hw3';
+    ch.assertExchange(ex, 'direct', { durable: false });
+    ch.assertQueue('', { exclusive: true }, function (err, q) {
+      console.log(' [*] Waiting for logs. To exit press CTRL+C', q.queue);
 
-      ch.assertExchange(ex, 'direct', { durable: false });
+      keys.forEach(function (key) {
+        ch.bindQueue(q.queue, ex, key);
+      });
 
-      ch.assertQueue('', { exclusive: true }, function (err, q) {
-        console.log(' [*] Waiting for logs. To exit press CTRL+C');
-
-        keys.forEach(function (key) {
-          ch.bindQueue(q.queue, ex, key);
-        });
-
-        ch.consume(q.queue, function (msg) {
-          console.log(" [x] %s: '%s'", msg.fields.routingKey, msg.content.toString());
-          // return the message
-          res.json({
+      ch.consume(q.queue, function (msg) {
+        console.log(" [x] %s: '%s'", msg.fields.routingKey, msg.content.toString());
+        // return the message
+        if (msg) {
+          self.conn.close();
+          return res.json({
             status: "OK",
             msg: msg.content.toString()
           })
-        }, { noAck: true });
-      });
+        } else {
+          console.log("NO MESG")
+        }
+      }, { noAck: true });
     });
   });
 })
@@ -87,24 +88,22 @@ router.post("/listen", function(req, res) {
 // speak, emiter
 router.post('/speak', function(req, res) {
 
-  amqp.connect('amqp://localhost', function (err, conn) {
-    conn.createChannel(function (err, ch) {
-      var ex = 'hw3';
-      key = req.body.key;
-      msg = req.body.msg;
+  self.conn.createChannel(function (err, ch) {
+    var ex = 'hw3';
+    key = req.body.key;
+    msg = req.body.msg;
 
-      ch.assertExchange(ex, 'direct', { durable: false });
-      ch.publish(ex, key, new Buffer(msg));
-      console.log(" [x] Sent %s: '%s'", key, msg);
-    });
-
-    setTimeout(function () { 
-      res.json({
-        status: "OK",
-      })
-    }, 500);
+    ch.assertExchange(ex, 'direct', { durable: false });
+    ch.publish(ex, key, new Buffer(msg));
+    console.log(" [x] Sent %s: '%s'", key, msg);
   });
-  
+
+  setTimeout(function () { 
+    res.json({
+      status: "OK"
+    })
+  }, 500);
+
 })
 
 
