@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const amqp = require('amqplib/callback_api');
+
 
 // const home = require("./controllers/home.js");
 const game = require("./controllers/ttt.js");
@@ -44,6 +46,66 @@ router.post("/getscore", game.getScore);
 router.get("/login", userController.login_get);
 router.get("/signup", userController.signup_get);
 router.get("/logout", userController.logout);
+
+// hw3 
+
+// listen, receiver
+router.post("/listen", function(req, res) {
+  keys = req.body.keys
+
+  // if (keys.length == 0) {
+  //   console.log("Usage: receive_logs_direct.js [info] [warning] [error]");
+  //   process.exit(1);
+  // }
+
+  amqp.connect('amqp://localhost', function (err, conn) {
+    conn.createChannel(function (err, ch) {
+      var ex = 'hw3';
+
+      ch.assertExchange(ex, 'direct', { durable: false });
+
+      ch.assertQueue('', { exclusive: true }, function (err, q) {
+        console.log(' [*] Waiting for logs. To exit press CTRL+C');
+
+        keys.forEach(function (key) {
+          ch.bindQueue(q.queue, ex, key);
+        });
+
+        ch.consume(q.queue, function (msg) {
+          console.log(" [x] %s: '%s'", msg.fields.routingKey, msg.content.toString());
+          // return the message
+          res.json({
+            status: "OK",
+            msg: msg.content.toString()
+          })
+        }, { noAck: false });
+      });
+    });
+  });
+})
+
+// speak, emiter
+router.post('/speak', function(req, res) {
+
+  amqp.connect('amqp://localhost', function (err, conn) {
+    conn.createChannel(function (err, ch) {
+      var ex = 'hw3';
+      key = req.body.key;
+      msg = req.body.msg;
+
+      ch.assertExchange(ex, 'direct', { durable: false });
+      ch.publish(ex, key, new Buffer(msg));
+      console.log(" [x] Sent %s: '%s'", key, msg);
+    });
+
+    setTimeout(function () { 
+      res.json({
+        status: "OK",
+      })
+    }, 500);
+  });
+  
+})
 
 
 router.get("/", game.home);
