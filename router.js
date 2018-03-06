@@ -12,7 +12,7 @@ const userController = require("./controllers/user.js");
   amqp.connect('amqp://localhost', function (err, conn) {
     self.conn = conn
     self.conn.createChannel(function (err, ch) {
-      ch.assertExchange(ex, 'direct', { durable: false });
+      ch.assertExchange("hw3", 'direct', { durable: false });
       ch.close()
     });
   });
