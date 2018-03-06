@@ -74,14 +74,18 @@ router.post("/listen", function(req, res) {
         ch.consume(q.queue, function (msg) {
           console.log(" [x] %s: '%s'", msg.fields.routingKey, msg.content.toString());
           // return the message
-          res.json({
-            status: "OK",
-            msg: msg.content.toString()
-          })
-        }, { noAck: false });
+          if (msg) {
+            res.json({
+              status: "OK",
+              msg: msg.content.toString()
+            })
+          }
+        }, { noAck: true });
       });
     });
+    
   });
+  
 })
 
 // speak, emiter
