@@ -72,7 +72,6 @@ router.post("/listen", function(req, res) {
         console.log(" [x] %s: '%s'", msg.fields.routingKey, msg.content.toString());
         // return the message
         if (msg) {
-          ch.close()
           return res.json({
             status: "OK",
             msg: msg.content.toString()
@@ -95,14 +94,10 @@ router.post('/speak', function(req, res) {
     ch.publish(ex, key, new Buffer(msg));
     console.log(" [x] Sent %s: '%s'", key, msg);
     ch.close()
-  });
-
-  setTimeout(function () { 
     res.json({
       status: "OK"
     })
-  }, 500);
-
+  });
 })
 
 
