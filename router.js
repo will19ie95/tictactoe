@@ -76,6 +76,7 @@ router.post("/listen", function(req, res) {
             status: "OK",
             msg: msg.content.toString()
           })
+          ch.close();
         } 
       }, { noAck: true });
     });
