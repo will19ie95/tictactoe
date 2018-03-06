@@ -94,10 +94,10 @@ router.post('/speak', function(req, res) {
     ch.assertExchange(ex, 'direct', { durable: false });
     ch.publish(ex, key, new Buffer(msg));
     console.log(" [x] Sent %s: '%s'", key, msg);
+    ch.close()
   });
 
   setTimeout(function () { 
-    ch.close()
     res.json({
       status: "OK"
     })
