@@ -11,6 +11,10 @@ const userController = require("./controllers/user.js");
 
   amqp.connect('amqp://localhost', function (err, conn) {
     self.conn = conn
+    self.conn.createChannel(function (err, ch) {
+      ch.assertExchange(ex, 'direct', { durable: false });
+      ch.close()
+    });
   });
 
 const init_locals = function(req, res, next) {
@@ -60,7 +64,7 @@ router.post("/listen", function(req, res) {
     keys = req.body.keys
     var ex = 'hw3';
 
-    ch.assertExchange(ex, 'direct', { durable: false });
+    // ch.assertExchange(ex, 'direct', { durable: false });
     ch.assertQueue('', { exclusive: true }, function (err, q) {
       console.log(' [*] Waiting for logs. To exit press CTRL+C', q.queue);
 
@@ -93,7 +97,7 @@ router.post('/speak', function(req, res) {
     key = req.body.key;
     msg = req.body.msg;
 
-    ch.assertExchange(ex, 'direct', { durable: false });
+    // ch.assertExchange(ex, 'direct', { durable: false });
     ch.publish(ex, key, new Buffer(msg));
     console.log(" [x] Sent %s: '%s'", key, msg);
     ch.close()
