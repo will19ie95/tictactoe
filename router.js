@@ -71,24 +71,17 @@ router.post("/listen", function(req, res) {
           ch.bindQueue(q.queue, ex, key);
         });
 
-        
-      });
-
-      ch.consume(q.queue, function (msg) {
-        console.log(" [x] %s: '%s'", msg.fields.routingKey, msg.content.toString());
-        // return the message
-        if (msg) {
-          return res.json({
+        ch.consume(q.queue, function (msg) {
+          console.log(" [x] %s: '%s'", msg.fields.routingKey, msg.content.toString());
+          // return the message
+          res.json({
             status: "OK",
             msg: msg.content.toString()
           })
-        }
-      }, { noAck: true });
-      
+        }, { noAck: true });
+      });
     });
-    
   });
-  
 })
 
 // speak, emiter
