@@ -72,13 +72,12 @@ router.post("/listen", function(req, res) {
         console.log(" [x] %s: '%s'", msg.fields.routingKey, msg.content.toString());
         // return the message
         if (msg) {
+          ch.close()
           return res.json({
             status: "OK",
             msg: msg.content.toString()
           })
-        } else {
-          console.log("NO MESG")
-        }
+        } 
       }, { noAck: true });
     });
   });
