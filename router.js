@@ -77,7 +77,8 @@ router.post("/listen", function(req, res) {
         // return the message
         msg_data = msg;
         if (msg_data) {
-          return res.json({
+          ch.close();
+          res.json({
             status: "OK",
             msg: msg_data.content.toString()
           })
