@@ -12,8 +12,8 @@ const userController = require("./controllers/user.js");
 amqp.connect('amqp://localhost', function (err, conn) {
   self.conn = conn
   self.conn.createChannel(function (err, ch) {
-    ch.assertExchange("hw3", 'direct', { durable: false });
-    ch.close()
+    // ch.assertExchange("hw3", 'direct', { durable: false });
+    // ch.close()
   });
 });
 
@@ -64,6 +64,7 @@ router.post("/listen", function(req, res) {
     keys = req.body.keys
     var ex = 'hw3';
 
+    ch.assertExchange(ex, 'direct', { durable: false });
     ch.assertQueue('', { exclusive: true }, function (err, q) {
       console.log(' [*] Waiting for logs. To exit press CTRL+C', q.queue);
 
@@ -83,7 +84,7 @@ router.post("/listen", function(req, res) {
             msg: msg_data.content.toString()
           })
         } 
-      }, { noAck: false });
+      }, { noAck: true });
     });
   });
 })
