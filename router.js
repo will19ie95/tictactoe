@@ -9,13 +9,13 @@ const game = require("./controllers/ttt.js");
 const play = require("./controllers/play.js");
 const userController = require("./controllers/user.js");
 
-  amqp.connect('amqp://localhost', function (err, conn) {
-    self.conn = conn
-    self.conn.createChannel(function (err, ch) {
-      ch.assertExchange("hw3", 'direct', { durable: false });
-      ch.close()
-    });
+amqp.connect('amqp://localhost', function (err, conn) {
+  self.conn = conn
+  self.conn.createChannel(function (err, ch) {
+    ch.assertExchange("hw3", 'direct', { durable: false });
+    ch.close()
   });
+});
 
 const init_locals = function(req, res, next) {
   res.locals.user = req.user;
@@ -26,7 +26,7 @@ const init_locals = function(req, res, next) {
 };
 
 function ensureAuthenticated(req, res, next) {
-  if(req.isAuthenticated()) {
+  if(req.isAuthenticated()) { 
     next()
   } else {
     // req.flash("info", "You must be logged in.")
@@ -40,7 +40,7 @@ function ensureAuthenticated(req, res, next) {
 router.use(init_locals);
 
 // POST API Calls
-// router.post("/signup", signup);
+// router.post("/signup", signup); 
 router.post("/ttt/play", ensureAuthenticated, game.play);
 router.post("/adduser", userController.addUser);
 router.post("/verify", userController.verify);
@@ -64,27 +64,27 @@ router.post("/listen", function(req, res) {
     keys = req.body.keys
     var ex = 'hw3';
 
-    // ch.assertExchange(ex, 'direct', { durable: false });
+    ch.assertExchange(ex, 'direct', { durable: false });
     ch.assertQueue('', { exclusive: true }, function (err, q) {
       console.log(' [*] Waiting for logs. To exit press CTRL+C', q.queue);
 
       keys.forEach(function (key) {
         ch.bindQueue(q.queue, ex, key);
+        console.log('\t --' + key)
       });
 
       ch.consume(q.queue, function (msg) {
         console.log(" [x] %s: '%s'", msg.fields.routingKey, msg.content.toString());
         // return the message
-        if (msg) {
+        msg_data = msg;
+        if (msg_data) {
           ch.close();
           return res.json({
             status: "OK",
-            msg: msg.content.toString()
+            msg: msg_data.content.toString()
           })
         } 
       }, { noAck: true });
-      
-      
     });
   });
 })
@@ -99,8 +99,8 @@ router.post('/speak', function(req, res) {
 
     // ch.assertExchange(ex, 'direct', { durable: false });
     ch.publish(ex, key, new Buffer(msg));
-    console.log(" [x] Sent %s: '%s'", key, msg);
     ch.close()
+    console.log(" [x] Sent %s: '%s'", key, msg);
     return res.json({
       status: "OK"
     })
