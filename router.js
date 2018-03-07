@@ -64,7 +64,6 @@ router.post("/listen", function(req, res) {
     keys = req.body.keys
     var ex = 'hw3';
 
-    ch.assertExchange(ex, 'direct', { durable: false });
     ch.assertQueue('', { exclusive: true }, function (err, q) {
       console.log(' [*] Waiting for logs. To exit press CTRL+C', q.queue);
 
@@ -84,7 +83,7 @@ router.post("/listen", function(req, res) {
             msg: msg_data.content.toString()
           })
         } 
-      }, { noAck: true });
+      }, { noAck: false });
     });
   });
 })
