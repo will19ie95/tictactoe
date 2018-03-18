@@ -9,6 +9,7 @@ const session = require("express-session");
 const logger = require("morgan");
 const passport = require("passport");
 const db = require("./db");
+const cassandra = require("./cassandra");
 
 const setup_passport = require("./setup_passport")
 

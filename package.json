@@ -10,9 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.5.2",
+    "async": "^2.6.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.2",
     "bootstrap": "^4.0.0",
+    "cassandra-driver": "^3.4.1",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.5.7",

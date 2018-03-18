@@ -13,7 +13,6 @@ amqp.connect('amqp://localhost', function (err, conn) {
   self.conn = conn
   self.conn.createChannel(function (err, ch) {
     ch.assertExchange("hw3", 'direct', { durable: false });
-    // ch.close()
   });
 });
 
@@ -29,8 +28,6 @@ function ensureAuthenticated(req, res, next) {
   if(req.isAuthenticated()) { 
     next()
   } else {
-    // req.flash("info", "You must be logged in.")
-    // res.redirect("/")
     res.json({
       status: "ERROR"
     })
@@ -98,7 +95,6 @@ router.post('/speak', function(req, res) {
 
     // ch.assertExchange(ex, 'direct', { durable: false });
     ch.publish(ex, key, new Buffer(msg));
-    // ch.close()
     console.log(" [x] Sent %s: '%s'", key, msg);
     return res.json({
       status: "OK"
