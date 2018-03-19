@@ -1,20 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const amqp = require('amqplib/callback_api');
-const self = this
+const multer = require('multer')
+const upload = multer();
 
 // const home = require("./controllers/home.js");
 const game = require("./controllers/ttt.js");
 const play = require("./controllers/play.js");
 const userController = require("./controllers/user.js");
-
-amqp.connect('amqp://localhost', function (err, conn) {
-  self.conn = conn
-  self.conn.createChannel(function (err, ch) {
-    ch.assertExchange("hw3", 'direct', { durable: false });
-  });
-});
+const rabbitmq = require("./controllers/rabbitmq.js")
+const cassandra = require("./controllers/cassandra.js")
 
 const init_locals = function(req, res, next) {
   res.locals.user = req.user;
@@ -37,7 +32,6 @@ function ensureAuthenticated(req, res, next) {
 router.use(init_locals);
 
 // POST API Calls
-// router.post("/signup", signup); 
 router.post("/ttt/play", ensureAuthenticated, game.play);
 router.post("/adduser", userController.addUser);
 router.post("/verify", userController.verify);
@@ -46,65 +40,19 @@ router.post("/logout", userController.logout);
 router.post("/listgames", game.listGames);
 router.post("/getgame", game.getGame);
 router.post("/getscore", game.getScore);
-// getscore
+// hw3 
+router.post("/listen", rabbitmq.listen);
+router.post('/speak', rabbitmq.speak);
 
+// GET API Calls
 router.get("/login", userController.login_get);
 router.get("/signup", userController.signup_get);
 router.get("/logout", userController.logout);
-
-// hw3 
-
-// listen, receiver
-router.post("/listen", function(req, res) {
-
-  self.conn.createChannel(function (err, ch) {
-    const keys = req.body.keys
-    const ex = 'hw3';
-
-    ch.assertQueue('', { exclusive: true }, function (err, q) {
-      console.log(' [*] Waiting for logs. To exit press CTRL+C', q.queue);
-
-      keys.forEach(function (key) {
-        ch.bindQueue(q.queue, ex, key);
-        console.log('\t --' + key)
-      });
-
-      ch.consume(q.queue, function (msg) {
-        console.log(" [x] %s: '%s'", msg.fields.routingKey, msg.content.toString());
-        // return the message
-        msg_data = msg;
-        if (msg_data) {
-          ch.close();
-          return res.json({
-            status: "OK",
-            msg: msg_data.content.toString()
-          })
-        } 
-      }, { noAck: true });
-    });
-  });
-})
-
-// speak, emiter
-router.post('/speak', function(req, res) {
-
-  self.conn.createChannel(function (err, ch) {
-    var ex = 'hw3';
-    key = req.body.key;
-    msg = req.body.msg;
-
-    // ch.assertExchange(ex, 'direct', { durable: false });
-    ch.publish(ex, key, new Buffer(msg));
-    console.log(" [x] Sent %s: '%s'", key, msg);
-    return res.json({
-      status: "OK"
-    })
-  });
-})
-
-
 router.get("/", game.home);
 
+// hw4
+router.post("/deposit", upload.single('contents'), cassandra.deposit)
+router.get("/retrieve", cassandra.retrieve)
 
 // catch all other routes
 router.use("*", function (req, res) {

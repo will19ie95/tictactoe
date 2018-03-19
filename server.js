@@ -9,7 +9,6 @@ const session = require("express-session");
 const logger = require("morgan");
 const passport = require("passport");
 const db = require("./db");
-const cassandra = require("./cassandra");
 
 const setup_passport = require("./setup_passport")
 
@@ -65,10 +64,10 @@ app.use(passport.session());
 
 // logger
 app.use(logger("short"));
-app.use(function(req,res,next) {
-  console.log(req.body)
-  next()
-});
+// app.use(function(req,res,next) {
+//   console.log("req body: ", req.body)
+//   next()
+// });
 
 app.use(router);
 
